@@ -1,28 +1,33 @@
 package stock_management.daos
 
 import stock_management.StockInstance
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * The Data Access Object (DAO) for StockInstances - In real life this would be the layer that interacted with the database,
  * for example it might contain SQL queries. For this example, however, it stores data in a hashmap in memory.
  */
 class StockInstanceDao {
-    private val stockInstances = hashMapOf<String, StockInstance>()
+    private val stockInstances = hashMapOf<Int, StockInstance>()
 
-    fun create(stockInstance: StockInstance): StockInstance {
-        stockInstances[stockInstance.id] = stockInstance
-        return stockInstance
+    private var lastId: AtomicInteger = AtomicInteger(stockInstances.size - 1)
+
+    fun create(stockLineId: Int, warehouseId: Int, itemCount: Int): StockInstance {
+        val id = lastId.incrementAndGet()
+        val newStockInstance = StockInstance(id, stockLineId, warehouseId, itemCount)
+        stockInstances[id] = newStockInstance
+        return newStockInstance
     }
 
-    fun getForWarehouse(warehouseId: String): List<StockInstance> {
+    fun getForWarehouse(warehouseId: Int): List<StockInstance> {
         return stockInstances.values.filter { it.warehouseId == warehouseId }
     }
 
-    fun getForStockLine(stockLineId: String): List<StockInstance> {
+    fun getForStockLine(stockLineId: Int): List<StockInstance> {
         return stockInstances.values.filter { it.stockLineId == stockLineId }
     }
 
-    fun getForWarehouseAndStockLine(warehouseId: String, stockLineId: String): StockInstance? {
+    fun getForWarehouseAndStockLine(warehouseId: Int, stockLineId: Int): StockInstance? {
         return stockInstances.values.find { it.warehouseId == warehouseId && it.stockLineId == stockLineId }
     }
 

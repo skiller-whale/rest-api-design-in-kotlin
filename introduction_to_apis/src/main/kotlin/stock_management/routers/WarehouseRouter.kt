@@ -5,9 +5,19 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import stock_management.daos.StockInstanceDao
+import kotlinx.serialization.Serializable
+import stock_management.StockInstance
 import stock_management.Warehouse
+import stock_management.daos.StockInstanceDao
 import stock_management.daos.WarehouseDao
+
+private const val INSUFFICIENT_STOCK_ERROR = "Insufficient stock"
+
+@Serializable
+data class Delivery(val stockLineId: Int, val itemCount: Int)
+
+@Serializable
+data class WriteOff(val stockLineId: Int, val itemCount: Int)
 
 fun Routing.warehouseRouter(
     warehouseDao: WarehouseDao,
@@ -20,7 +30,7 @@ fun Routing.warehouseRouter(
         }
 
         get("/{warehouse-id}") {
-            val id = call.parameters["warehouse-id"]!!
+            val id = call.parameters["warehouse-id"]!!.toInt()
 
             val warehouse = warehouseDao.getById(id)
             if (warehouse != null) {
@@ -31,8 +41,16 @@ fun Routing.warehouseRouter(
             }
         }
 
+        post {
+            val warehouse = call.receive<Warehouse>()
+
+            val createdWarehouse = warehouseDao.create(warehouse.name)
+            call.respond(createdWarehouse)
+            call.response.status(HttpStatusCode.Created)
+        }
+
         put("/{warehouse-id}") {
-            val id = call.parameters["warehouse-id"]!!
+            val id = call.parameters["warehouse-id"]!!.toInt()
 
             val existingWarehouse = warehouseDao.getById(id)
             val warehouse = call.receive<Warehouse>()
@@ -40,13 +58,12 @@ fun Routing.warehouseRouter(
                 call.respond(warehouseDao.update(warehouse))
                 call.response.status(HttpStatusCode.OK)
             } else {
-                call.respond(warehouseDao.create(warehouse))
-                call.response.status(HttpStatusCode.Created)
+                call.response.status(HttpStatusCode.NotFound)
             }
         }
 
         delete("/{warehouse-id}") {
-            val id = call.parameters["warehouse-id"]!!
+            val id = call.parameters["warehouse-id"]!!.toInt()
 
             val warehouse = warehouseDao.getById(id)
             if (warehouse != null) {
@@ -63,6 +80,49 @@ fun Routing.warehouseRouter(
 
             } else {
                 call.response.status(HttpStatusCode.NotFound)
+            }
+        }
+
+        post("/{warehouse-id}/delivery") {
+            val warehouseId = call.parameters["warehouse-id"]!!.toInt()
+            val (stockLineId, itemCount) = call.receive<Delivery>()
+
+            val stockInstance = stockInstanceDao.getForWarehouseAndStockLine(warehouseId, stockLineId)
+            if (stockInstance == null) {
+                stockInstanceDao.create(stockLineId, warehouseId, itemCount)
+            } else {
+                stockInstanceDao.update(
+                    StockInstance(
+                        stockInstance.id,
+                        stockLineId,
+                        warehouseId,
+                        stockInstance.itemCount + itemCount
+                    )
+                )
+            }
+
+            call.respond(HttpStatusCode.OK)
+        }
+
+        post("/{warehouse-id}/write-off") {
+            val warehouseId = call.parameters["warehouse-id"]!!.toInt()
+            val (stockLineId, itemCount) = call.receive<WriteOff>()
+
+            val stockInstanceFrom = stockInstanceDao.getForWarehouseAndStockLine(warehouseId, stockLineId)
+
+            if (stockInstanceFrom == null || stockInstanceFrom.itemCount < itemCount) {
+                call.response.status(HttpStatusCode.UnprocessableEntity)
+                call.respond(INSUFFICIENT_STOCK_ERROR)
+            } else {
+                stockInstanceDao.update(
+                    StockInstance(
+                        stockInstanceFrom.id,
+                        stockLineId,
+                        warehouseId,
+                        stockInstanceFrom.itemCount - itemCount,
+                    ),
+                )
+                call.respond(HttpStatusCode.OK)
             }
         }
     }

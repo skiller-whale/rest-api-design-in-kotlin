@@ -14,13 +14,21 @@ fun Routing.stockLineRouter(
     stockInstanceDao: StockInstanceDao
 ) {
     route("/stock-lines") {
+        post {
+            val stockLine = call.receive<StockLine>()
+
+            val createdStockLine = stockLineDao.create(stockLine.name)
+            call.respond(createdStockLine)
+            call.response.status(HttpStatusCode.Created)
+        }
+
         get {
             val stockLines = stockLineDao.getAll()
             call.respond(stockLines)
         }
 
         get("/{stockLine-id}") {
-            val id = call.parameters["stockLine-id"]!!
+            val id = call.parameters["stockLine-id"]!!.toInt()
 
             val stockLine = stockLineDao.getById(id)
             if (stockLine != null) {
@@ -32,7 +40,7 @@ fun Routing.stockLineRouter(
         }
 
         put("/{stockLine-id}") {
-            val id = call.parameters["stockLine-id"]!!
+            val id = call.parameters["stockLine-id"]!!.toInt()
 
             val existingStockLine = stockLineDao.getById(id)
             val stockLine = call.receive<StockLine>()
@@ -40,13 +48,12 @@ fun Routing.stockLineRouter(
                 call.respond(stockLineDao.update(stockLine))
                 call.response.status(HttpStatusCode.OK)
             } else {
-                call.respond(stockLineDao.create(stockLine))
-                call.response.status(HttpStatusCode.Created)
+                call.response.status(HttpStatusCode.NotFound)
             }
         }
 
         delete("/{stockLine-id}") {
-            val id = call.parameters["stockLine-id"]!!
+            val id = call.parameters["stockLine-id"]!!.toInt()
 
             val stockLine = stockLineDao.getById(id)
             if (stockLine != null) {

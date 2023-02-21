@@ -1,6 +1,3 @@
 .gradle
 .idea
-build/
 !gradle-wrapper.jar
-.DS_Store
-.vscode/settings.json

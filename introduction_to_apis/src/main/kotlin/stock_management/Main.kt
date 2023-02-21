@@ -10,16 +10,17 @@ import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.Serializable
 import stock_management.daos.*
 import stock_management.routers.*
+import kotlinx.serialization.json.Json
 
 /**
  * Data entities
  */
 @Serializable
-data class Warehouse(val id: String, val name: String)
+data class Warehouse(val id: Int?, val name: String)
 @Serializable
-data class StockLine(val id: String, val name: String)
+data class StockLine(val id: Int?, val name: String)
 @Serializable
-data class StockInstance(val id: String, val stockLineId: String, val warehouseId: String, val itemCount: Int)
+data class StockInstance(val id: Int, val stockLineId: Int, val warehouseId: Int, val itemCount: Int)
 
 fun main() {
     val warehouseDao = WarehouseDao()
@@ -32,11 +33,12 @@ fun main() {
         routing {
             warehouseRouter(warehouseDao, stockInstanceDao)
             stockLineRouter(stockLineDao, stockInstanceDao)
-            stockInstanceRouter(stockInstanceDao)
         }
 
         install(ContentNegotiation) {
-            json()
+            json(Json {
+                explicitNulls = false
+            })
         }
     }
 

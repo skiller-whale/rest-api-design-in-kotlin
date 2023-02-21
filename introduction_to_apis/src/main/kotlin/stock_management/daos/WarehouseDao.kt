@@ -1,20 +1,25 @@
 package stock_management.daos
 
 import stock_management.Warehouse
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * The Data Access Object (DAO) for Warehouses - In real life this would be the layer that interacted with the database,
  * for example it might contain SQL queries. For this example, however, it stores data in a hashmap in memory.
  */
 class WarehouseDao {
-    private val warehouses = hashMapOf<String, Warehouse>()
+    private val warehouses = hashMapOf<Int, Warehouse>()
 
-    fun create(warehouse: Warehouse): Warehouse {
-        warehouses[warehouse.id] = warehouse
-        return warehouse
+    private var lastId: AtomicInteger = AtomicInteger(warehouses.size - 1)
+
+    fun create(name: String): Warehouse {
+        val id = lastId.incrementAndGet()
+        val newWarehouse = Warehouse(name = name, id = id)
+        warehouses[id] = newWarehouse
+        return newWarehouse
     }
 
-    fun getById(id: String): Warehouse? {
+    fun getById(id: Int): Warehouse? {
         return warehouses[id]
     }
 
@@ -23,7 +28,7 @@ class WarehouseDao {
     }
 
     fun update(warehouse: Warehouse): Warehouse {
-        warehouses[warehouse.id] = warehouse
+        warehouses[warehouse.id!!] = warehouse
         return warehouse
     }
 
@@ -31,6 +36,3 @@ class WarehouseDao {
         warehouses.remove(warehouse.id)
     }
 }
-
-
-
