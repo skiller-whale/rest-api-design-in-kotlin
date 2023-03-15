@@ -34,8 +34,8 @@ jobs:
         with:
           build-args: |
             release=${{ github.ref_name }}
-          context: "{{defaultContext}}:_docker"
-          file: Docker.server
+          context: _docker
+          file: Dockerfile.server
           platforms: linux/amd64, linux/arm64
           push: true
           tags: skiller-whale/rest-api-design-in-kotlin-server:latest
@@ -45,8 +45,8 @@ jobs:
         with:
           build-args: |
             release=${{ github.ref_name }}
-          context: "{{defaultContext}}:_docker"
-          file: Docker.client
+          context: _docker
+          file: Dockerfile.client
           platforms: linux/amd64, linux/arm64
           push: true
           tags: skiller-whale/rest-api-design-in-kotlin-client:latest
