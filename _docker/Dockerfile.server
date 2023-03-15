@@ -5,17 +5,14 @@ FROM eclipse-temurin:17-jdk
 USER root
 WORKDIR /app
 
+RUN mkdir -p src
+
 # Get gradle distribution
 COPY *.gradle.kts gradle.* gradlew ./
 COPY gradle gradle
 
 # Cuts ~20s off a cached build
 RUN ./gradlew --version
-
-# Cuts ~50s off a cached build - this will no longer help within a session, because people won't be rebuilding, but may help between sessions, depending on the amount of shared code.
-RUN ./gradlew build --stacktrace
-
-RUN mkdir -p src
 
 EXPOSE 7070
 
