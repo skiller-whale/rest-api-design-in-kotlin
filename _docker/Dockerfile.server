@@ -15,8 +15,7 @@ RUN ./gradlew --version
 # Cuts ~50s off a cached build - this will no longer help within a session, because people won't be rebuilding, but may help between sessions, depending on the amount of shared code.
 RUN ./gradlew build --stacktrace
 
-COPY ./src ./src
-RUN ./gradlew build --stacktrace
+RUN mkdir -p src
 
 EXPOSE 7070
 
