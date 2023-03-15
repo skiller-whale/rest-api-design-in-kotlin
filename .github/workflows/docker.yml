@@ -34,7 +34,7 @@ jobs:
         with:
           build-args: |
             release=${{ github.ref_name }}
-          context: _docker
+          context: "{{defaultContext}}:_docker"
           file: Dockerfile.server
           platforms: linux/amd64, linux/arm64
           push: true
@@ -45,7 +45,7 @@ jobs:
         with:
           build-args: |
             release=${{ github.ref_name }}
-          context: _docker
+          context: "{{defaultContext}}:_docker"
           file: Dockerfile.client
           platforms: linux/amd64, linux/arm64
           push: true
