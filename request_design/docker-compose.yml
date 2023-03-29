@@ -7,11 +7,11 @@ services:
       SERVER_URL: https://train.skillerwhale.com/
       WATCHER_BASE_PATH: /app/exercises
       ATTENDANCE_ID_FILE: /app/attendance_id
-      WATCHED_EXTS: kt
+      WATCHED_EXTS: kt log
       IGNORE_DIRS: .git
     volumes:
       - ./src:/app/exercises
-      - ./attendance_id:/app/sync/attendance_id
+      - ./attendance_id:/app/attendance_id
     tty: true
     stdin_open: true
   dev-server:
@@ -24,7 +24,9 @@ services:
   httpie:
     image: alpine/httpie
     profiles: ["httpie"]
+    volumes:
+      - ./http/:/app/http
     entrypoint: >
-      su -s /bin/sh -c 'mkdir -p .config/httpie; echo "{\"default_options\":[\"--print=hHbB\"]}" >.config/httpie/config.json; http; exec /bin/sh' root
+      su -s /bin/sh -c 'exec /app/http/sh' root
     volumes:
       - .:/app

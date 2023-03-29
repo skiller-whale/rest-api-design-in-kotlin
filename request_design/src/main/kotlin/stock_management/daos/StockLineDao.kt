@@ -13,11 +13,16 @@ class StockLineDao {
 
     private var lastId: AtomicInteger = AtomicInteger(stockLines.size - 1)
 
-    fun create(attributes: StockLineAttributes): StockLine {
-        val id = lastId.incrementAndGet()
+    fun createWithId(attributes: StockLineAttributes, id: Int): StockLine {
         val newStockLine = StockLine(id, attributes)
         stockLines[id] = newStockLine
+        // FIXME: update `lastId` properly
         return newStockLine
+    }
+
+    fun create(attributes: StockLineAttributes): StockLine {
+        val id = lastId.incrementAndGet()
+        return createWithId(attributes, id)
     }
 
     fun getById(id: Int): StockLine? {
