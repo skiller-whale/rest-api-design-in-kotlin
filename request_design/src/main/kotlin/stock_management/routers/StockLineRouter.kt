@@ -115,10 +115,6 @@ fun Routing.stockLineRouter(
                 val id = call.parameters["stockLine-id"]!!.toInt()
 
                 val existingStockLine = stockLineDao.getById(id)
-                if (existingStockLine == null) {
-                    call.response.status(HttpStatusCode.NotFound)
-                    return@put
-                }
 
                 val stockLineAttributes: StockLineAttributes
                 try {
@@ -134,8 +130,12 @@ fun Routing.stockLineRouter(
                     return@put
                 }
 
-                val stockLine = StockLine(id, stockLineAttributes)
-                val updatedStockLine = stockLineDao.update(stockLine)
+                val updatedStockLine = if (existingStockLine != null) {
+                    stockLineDao.update(StockLine(id, stockLineAttributes))
+                } else {
+                    stockLineDao.createWithId(stockLineAttributes, id)
+                }
+
                 call.response.header("Allow", allowedMethods(id))
                 call.respond(
                     message = object {
