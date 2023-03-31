@@ -42,6 +42,7 @@ jobs:
         id: docker_name
         uses: frabert/replace-string-action@v2
         with:
+          flags: g
           string: ${{ matrix.docker_context }}
           pattern: '_'
           replace-with: '-'
