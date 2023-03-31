@@ -15,8 +15,7 @@ services:
     tty: true
     stdin_open: true
   dev-server:
-    build:
-      context: .
+    image: ghcr.io/skiller-whale/rest-api-design-in-kotlin/request-design
     ports:
       - "7070:7070"
     volumes:

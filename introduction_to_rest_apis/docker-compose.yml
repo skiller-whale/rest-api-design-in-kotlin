@@ -16,15 +16,13 @@ services:
     tty: true
     stdin_open: true
   stock_management_server:
-    build:
-      context: "./stock_management_server"
+    image: ghcr.io/skiller-whale/rest-api-design-in-kotlin/introduction-to-rest-apis/stock-management-server
     ports:
       - "7070:7070"
     volumes:
       - "./stock_management_server/src:/app/src"
   stock_management_client:
-    build:
-      context: "./stock_management_client"
+    image: ghcr.io/skiller-whale/rest-api-design-in-kotlin/introduction-to-rest-apis/stock-management-client
     ports:
       - "7071:7071"
     volumes:

@@ -11,10 +11,8 @@ jobs:
       matrix:
         docker_context:
           - introduction_to_apis/stock_management_server
-          - introduction_to_rest_apis/stock_management_server_1
-          - introduction_to_rest_apis/stock_management_server_2
-          - introduction_to_rest_apis/stock_management_client_1
-          - introduction_to_rest_apis/stock_management_client_2
+          - introduction_to_rest_apis/stock_management_server
+          - introduction_to_rest_apis/stock_management_client
           - request_design
 
     runs-on: ubuntu-latest
