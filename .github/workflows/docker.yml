@@ -50,15 +50,15 @@ jobs:
       - name: Print outputs
         run: echo "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/${{ steps.docker_name.outputs.replaced }}"
 
-#      - name: Build and push Docker image
-#        uses: docker/build-push-action@v3
-#        with:
-#          build-args: |
-#            release=${{ github.ref_name }}
-#          context: ${{ matrix.docker_context }}
-#          platforms: linux/amd64, linux/arm64
-#          push: true
-#          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-#${{ steps.meta.outputs.tags }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          build-args: |
+            release=${{ github.ref_name }}
+          context: ${{ matrix.docker_context }}
+          platforms: linux/amd64, linux/arm64
+          push: true
+          tags: "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/${{ steps.docker_name.outputs.replaced }}:latest"
 #          labels: ${{ steps.meta.outputs.labels }}
 
