@@ -7,6 +7,15 @@ env:
 
 jobs:
   build-and-push-image:
+    strategy:
+      matrix:
+        docker_context:
+          - request_design
+          - introduction_to_rest_apis/stock_management_server_1
+          - introduction_to_rest_apis/stock_management_server_2
+          - introduction_to_rest_apis/stock_management_client_1
+          - introduction_to_rest_apis/stock_management_client_2
+
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -29,26 +38,26 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v4
+      - name: Generate basis for Docker image
+        id: docker_name
+        uses: frabert/replace-string-action@v2
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            type=semver,pattern={{version}}
-            type=ref,event=branch
-            type=sha
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v3
-        with:
-          build-args: |
-            release=${{ github.ref_name }}
-          context: .
-          platforms: linux/amd64, linux/arm64
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          string: ${{ matrix.docker_context }}
+          pattern: '/'
+          replace-with: '_'
 
       - name: Print outputs
-        run: echo "${{ steps.meta.outputs.tags }}"
+        run: echo "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/${{ steps.docker_name.outputs.replaced }}"
+
+#      - name: Build and push Docker image
+#        uses: docker/build-push-action@v3
+#        with:
+#          build-args: |
+#            release=${{ github.ref_name }}
+#          context: ${{ matrix.docker_context }}
+#          platforms: linux/amd64, linux/arm64
+#          push: true
+#          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+#${{ steps.meta.outputs.tags }}
+#          labels: ${{ steps.meta.outputs.labels }}
+
