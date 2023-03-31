@@ -44,7 +44,7 @@ jobs:
         with:
           build-args: |
             release=${{ github.ref_name }}
-          context: request_design
+          context: .
           platforms: linux/amd64, linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
