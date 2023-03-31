@@ -38,17 +38,16 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-#      - name: Generate basis for Docker image
-#        id: docker_name
-#        uses: frabert/replace-string-action@v2
-#        with:
-#          string: ${{ matrix.docker_context }}
-#          pattern: '_'
-#          replace-with: '-'
+      - name: Generate basis for Docker image
+        id: docker_name
+        uses: frabert/replace-string-action@v2
+        with:
+          string: ${{ matrix.docker_context }}
+          pattern: '_'
+          replace-with: '-'
 
       - name: Print outputs
-        run: echo "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/${{ matrix.docker_context }}"
-#        run: echo "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/${{ steps.docker_name.outputs.replaced }}"
+        run: echo "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/${{ steps.docker_name.outputs.replaced }}"
 
 #      - name: Build and push Docker image
 #        uses: docker/build-push-action@v3
