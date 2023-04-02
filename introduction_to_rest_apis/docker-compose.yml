@@ -10,38 +10,22 @@ services:
       WATCHED_EXTS: "kt ts tsx"
       IGNORE_DIRS: ".git"
     volumes:
-      - "./stock_management_server_1/src/main/kotlin/stock_management:/app/exercises/stock_management_server_1"
-      - "./stock_management_client_1/src:/app/exercises/stock_management_client_1"
-      - "./stock_management_server_2/src/main/kotlin/stock_management:/app/exercises/stock_management_server_2"
-      - "./stock_management_client_2/src:/app/exercises/stock_management_client_2"
+      - "./stock_management_server:/app/exercises/stock_management_server"
+      - "./stock_management_client:/app/exercises/stock_management_client"
       - "./attendance_id:/app/sync/attendance_id"
     tty: true
     stdin_open: true
-  stock_management_server_1:
+  stock_management_server:
     build:
-      context: "./stock_management_server_1"
+      context: "./stock_management_server"
     ports:
       - "7070:7070"
     volumes:
-      - "./stock_management_server_1/src:/app/src"
-  stock_management_client_1:
+      - "./stock_management_server/src:/app/src"
+  stock_management_client:
     build:
-      context: "./stock_management_client_1"
+      context: "./stock_management_client"
     ports:
       - "7071:7071"
     volumes:
-      - "./stock_management_client_1/src:/src"
-  stock_management_server_2:
-    build:
-      context: "./stock_management_server_2"
-    ports:
-      - "7072:7072"
-    volumes:
-      - "./stock_management_server_2/src:/app/src"
-  stock_management_client_2:
-    build:
-      context: "./stock_management_client_2"
-    ports:
-      - "7073:7073"
-    volumes:
-      - "./stock_management_client_2/src:/src"
+      - "./stock_management_client/src:/src"
