@@ -1,0 +1,63 @@
+name: Build and publish a Docker image
+on: push
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build-and-push-image:
+    strategy:
+      matrix:
+        docker_context:
+          - introduction_to_apis/stock_management_server
+          - introduction_to_rest_apis/stock_management_server
+          - introduction_to_rest_apis/stock_management_client
+          - request_design
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate basis for Docker image
+        id: docker_name
+        uses: frabert/replace-string-action@v2
+        with:
+          flags: g
+          string: ${{ matrix.docker_context }}
+          pattern: '_'
+          replace-with: '-'
+
+      - name: Print outputs
+        run: echo "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/${{ steps.docker_name.outputs.replaced }}"
+
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          build-args: |
+            release=${{ github.ref_name }}
+          context: ${{ matrix.docker_context }}
+          platforms: linux/amd64, linux/arm64
+          push: true
+          tags: "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/${{ steps.docker_name.outputs.replaced }}:latest"
+#          labels: ${{ steps.meta.outputs.labels }}
+
