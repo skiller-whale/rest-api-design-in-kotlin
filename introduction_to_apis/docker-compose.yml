@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   sync:
-    image: "ghcr.io/skiller-whale/learnersync:dockerize"
+    image: "ghcr.io/skiller-whale/learnersync"
     network_mode: "host"
     environment:
       SERVER_URL: "https://train.skillerwhale.com/"
