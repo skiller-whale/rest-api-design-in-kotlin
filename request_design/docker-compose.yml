@@ -10,7 +10,8 @@ services:
       WATCHED_EXTS: "kt log"
       IGNORE_DIRS: ".git"
     volumes:
-      - "./stock_management_server:/app/exercises"
+      - "./http:/app/exercises/http"
+      - "./stock_management_server:/app/exercises/stock_management_server"
       - "./attendance_id:/app/attendance_id"
     tty: true
     stdin_open: true
