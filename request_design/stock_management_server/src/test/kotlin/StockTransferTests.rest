@@ -1,0 +1,31 @@
+
+### Deliver
+POST http://localhost:7070/adjust-stock/delivery HTTP/1.1
+content-type: application/json
+
+{
+    "stockLineId": 0,
+    "warehouseToId": 1,
+    "itemCount": 100
+}
+
+### Transfer
+POST http://localhost:7070/adjust-stock/stock-transfer HTTP/1.1
+content-type: application/json
+
+{
+    "stockLineId": 0,
+    "warehouseFromId": 1,
+    "warehouseToId": 0,
+    "itemCount": 100
+}
+
+### Write Off
+POST http://localhost:7070/adjust-stock/write-off HTTP/1.1
+content-type: application/json
+
+{
+    "stockLineId": 0,
+    "warehouseFromId": 1,
+    "itemCount": 10
+}
