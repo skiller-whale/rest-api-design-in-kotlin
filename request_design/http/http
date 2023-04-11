@@ -1,7 +1,5 @@
 #!/bin/sh
 
-HERE=`dirname $0`
-mkdir -p $HERE/logs
-LOG=$HERE/logs/`date +%s`.log
-/usr/local/bin/http $* 2>&1 | tee $LOG
+LOG=/logs/`date +%s`.log
+/usr/local/bin/http_real "$@" 2>&1 | tee $LOG
 sed -i -e 's/\x1b\[[0-9;]*m//g' $LOG

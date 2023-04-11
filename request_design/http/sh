@@ -1,8 +1,0 @@
-#!/bin/sh
-
-
-mkdir -p /root/.config/httpie
-echo "{\"default_options\":[\"--print=hHbB\",\"--timeout=1\",\"--pretty=all\"]}" >/root/.config/httpie/config.json
-http
-export PATH=/app/http:$PATH
-exec /bin/sh
