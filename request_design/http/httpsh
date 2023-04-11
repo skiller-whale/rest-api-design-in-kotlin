@@ -1,0 +1,3 @@
+#!/bin/sh
+http
+exec /bin/sh

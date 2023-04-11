@@ -23,9 +23,9 @@ services:
     volumes:
       - "./stock_management_server/src:/app/src"
   httpie:
-    image: "alpine/httpie"
+    image: ghcr.io/skiller-whale/rest-api-design-in-kotlin/request-design/http
+    build: http
     profiles: ["httpie"]
     volumes:
-      - "./http/:/app/http"
-    entrypoint: >
-      su -s /bin/sh -c 'exec /app/http/sh' root
+      - ./http/logs:/logs
+      - .:/app
