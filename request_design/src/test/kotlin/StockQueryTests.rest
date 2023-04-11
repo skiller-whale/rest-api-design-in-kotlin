@@ -1,8 +1,0 @@
-### Get stock lines in a warehouse:
-
-GET http://localhost:7070/warehouses/1/stock-lines HTTP/1.1
-
-
-### Get a particular stock line in a warehouse
-
-GET http://localhost:7070/warehouses/1/stock-lines/1 HTTP/1.1
