@@ -15,14 +15,18 @@ services:
       - "./attendance_id:/app/sync/attendance_id"
     tty: true
     stdin_open: true
-  stock_management_server:
-    image: ghcr.io/skiller-whale/rest-api-design-in-kotlin/introduction-to-rest-apis/stock-management-server
+  stock-management-server:
+    image: "ghcr.io/skiller-whale/rest-api-design-in-kotlin/introduction-to-rest-apis/stock-management-server"
+    build:
+      context: "./stock_management_server"
     ports:
       - "7070:7070"
     volumes:
       - "./stock_management_server/src:/app/src"
-  stock_management_client:
-    image: ghcr.io/skiller-whale/rest-api-design-in-kotlin/introduction-to-rest-apis/stock-management-client
+  stock-management-client:
+    image: "ghcr.io/skiller-whale/rest-api-design-in-kotlin/introduction-to-rest-apis/stock-management-client"
+    build:
+      context: "./stock_management_client"
     ports:
       - "7071:7071"
     volumes:

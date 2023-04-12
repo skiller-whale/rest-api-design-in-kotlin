@@ -15,7 +15,9 @@ services:
     tty: true
     stdin_open: true
   dev-server:
-    image: ghcr.io/skiller-whale/rest-api-design-in-kotlin/introduction-to-apis/stock-management-server
+    image: "ghcr.io/skiller-whale/rest-api-design-in-kotlin/introduction-to-apis/stock-management-server"
+    build:
+      context: "./stock_management_server"
     ports:
       - "7070:7070"
     volumes:
