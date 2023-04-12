@@ -20,7 +20,7 @@ import stock_management.REST.routers.stockLineRouter as restStockLineRouter
 import stock_management.REST.routers.warehouseRouter as restWarehouseRouter
 
 const val PORT = 7070
-const val ROOT_URL = "http://stock_management_server:${PORT}"
+const val ROOT_URL = "http://stock-management-server:${PORT}"
 
 fun main() {
     val app = embeddedServer(Netty, port = PORT) {

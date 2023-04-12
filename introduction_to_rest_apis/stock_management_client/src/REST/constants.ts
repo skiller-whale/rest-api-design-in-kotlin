@@ -1,3 +1,3 @@
 import { apiPort } from "../constants.ts";
 
-export const apiBase = `http://stock_management_server:${apiPort}/rest`;
+export const apiBase = `http://stock-management-server:${apiPort}/rest`;
