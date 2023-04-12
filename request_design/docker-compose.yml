@@ -16,7 +16,7 @@ services:
     tty: true
     stdin_open: true
   stock-management-server:
-    image: "ghcr.io/skiller-whale/rest-api-design-in-kotlin/request-design"
+    image: "ghcr.io/skiller-whale/rest-api-design-in-kotlin/request-design/stock-management-server"
     build:
       context: "./stock_management_server"
     ports:
@@ -24,9 +24,10 @@ services:
     volumes:
       - "./stock_management_server/src:/app/src"
   httpie:
-    image: ghcr.io/skiller-whale/rest-api-design-in-kotlin/request-design/http
-    build: http
+    image: "ghcr.io/skiller-whale/rest-api-design-in-kotlin/request-design/http"
+    build:
+      context: "./http"
     profiles: ["httpie"]
     volumes:
-      - ./http/logs:/logs
-      - .:/app
+      - "./http/logs:/logs"
+      - ".:/app"

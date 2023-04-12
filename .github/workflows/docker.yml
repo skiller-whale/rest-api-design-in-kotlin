@@ -13,7 +13,7 @@ jobs:
           - introduction_to_apis/stock_management_server
           - introduction_to_rest_apis/stock_management_server
           - introduction_to_rest_apis/stock_management_client
-          - request_design
+          - request_design/stock_management_server
           - request_design/http
 
     runs-on: ubuntu-latest
