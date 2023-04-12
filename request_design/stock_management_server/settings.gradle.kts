@@ -1,2 +1,1 @@
-rootProject.name = "requestDesignApiServer"
-
+rootProject.name = "stockManagementServer"
