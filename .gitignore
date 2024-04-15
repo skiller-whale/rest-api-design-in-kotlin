@@ -1,6 +1,6 @@
 .gradle
+.idea
 !gradle-wrapper.jar
-**/bin/*
-*.bin
-*.lock
-*.log
+build/
+.DS_Store
+.vscode/settings.json

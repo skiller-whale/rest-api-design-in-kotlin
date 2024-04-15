@@ -14,7 +14,7 @@ services:
       - "./attendance_id:/app/sync/attendance_id"
     tty: true
     stdin_open: true
-  dev-server:
+  stock-management-server:
     image: "ghcr.io/skiller-whale/rest-api-design-in-kotlin/introduction-to-apis/stock-management-server"
     build:
       context: "./stock_management_server"
