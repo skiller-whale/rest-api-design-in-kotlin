@@ -13,7 +13,7 @@ services:
     volumes:
       - "./stock_management_server:/app/exercises/stock_management_server"
       - "./stock_management_client:/app/exercises/stock_management_client"
-      - "./attendance_id:/app/sync/attendance_id"
+      - "../attendance_id:/app/sync/attendance_id"
     tty: true
     stdin_open: true
   stock-management-server:
