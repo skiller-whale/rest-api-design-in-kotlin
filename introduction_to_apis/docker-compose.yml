@@ -12,7 +12,7 @@ services:
       IGNORE_DIRS: ".git"
     volumes:
       - "./stock_management_server/src/main/kotlin/stock_management:/app/exercises/stock_management_server"
-      - "./attendance_id:/app/sync/attendance_id"
+      - "../attendance_id:/app/sync/attendance_id"
     tty: true
     stdin_open: true
   stock-management-server:
