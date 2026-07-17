@@ -1,8 +1,0 @@
-{
-        "files.exclude": {
-            "**/bin": true
-            "**/.gradle": true
-            "**/gradle": true
-            "**/*.lock": true
-        }
-}
